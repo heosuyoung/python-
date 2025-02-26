@@ -1,7 +1,7 @@
 import sys
 input=sys.stdin.readline
 
-st1=list(input().rstrip())
+st1=list(input().strip())
 st2=[]
 
 N=int(input())
