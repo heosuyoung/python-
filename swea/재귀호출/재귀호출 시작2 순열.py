@@ -1,5 +1,18 @@
-from itertools import permutations
+#순열은 방문배열사용
 n=int(input())
-dice=[1,2,3,4,5,6]
-for nums in permutations(dice,n):
-    print(list(nums))
+path=[]
+visited=[0]*(7)
+def dice(x):
+    if x==n:
+        print(path)
+        return
+
+    for i in range(1,7):
+        if visited[i]==1:
+            continue
+        visited[i]=1
+        path.append(i)
+        dice(x+1)
+        path.pop()
+        visited[i]=0
+dice(0)

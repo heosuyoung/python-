@@ -10,15 +10,42 @@ cnt+=1해서 cnt가 2면 return true 아니면 return false
 babi-gin
 '''
 
-path = []
+arr=list(map(int,input().split()))
+path=[]
+visited=[0]*6
+is_found_babygin=0
+def is_babygin():
+    cnt=0
+    a,b,c=path[0],path[1],path[2]
+    if a==b==c:
+        cnt+=1
+    elif a==b-1==c-2:
+        cnt+=1
+    a,b,c=path[3],path[4],path[5]
+    if a==b==c:
+        cnt+=1
+    elif a==b-1==c-2:
+        cnt+=1
+    return (cnt==2)
 
-def KFC(x):
-
-    if x==2:
-        print(path)
+def recur(lev):
+    global is_found_babygin
+    if lev==len(arr):
+        if is_babygin():
+            is_found_babygin=1
         return
-    for i in range(3):
-        path.append(i)
-        KFC(x + 1)
+
+    for i in range(len(arr)):
+        if visited[i] ==1:
+            continue
+        visited[i]=1
+        path.append(arr[i])
+        recur(lev+1)
         path.pop()
-KFC(0)
+        visited[i]=0 #백트래킹
+recur(0)
+if is_found_babygin:
+    print('YES')
+else:
+    print('NO')
+

@@ -1,10 +1,12 @@
+#중복순열은 그냥 방문배열 필요x
 path=[]
-def kfc (x):
+def recur(x):
     if x==3:
         print(path)
         return
     for i in range(1,7):
         path.append(i)
-        kfc(x+1)
+        recur(x+1)
         path.pop()
-kfc(0)
+
+recur(0)

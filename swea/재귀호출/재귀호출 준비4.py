@@ -1,8 +1,7 @@
-def kfc(x):
+def recur(x):
     if x==3:
         return
-    for _ in range(2):
-        kfc(x+1)
+    for i in range(2):
+        recur(x+1)
     print(x)
-
-kfc(0)
+recur(0)
