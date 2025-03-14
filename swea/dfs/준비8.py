@@ -2,16 +2,16 @@
 arr=[
     [0,1,1,1,0,0],
     [0,0,0,0,1,1],
-    [0,0,0,0,0,0],
-    [0,0,0,0,0,0],
-    [0,0,0,0,0,0],
-    [0,0,0,0,0,0]
+    [],
+    [],
+    [],
+    [],
 ]
 node=['A','B','T','Q','V','X']
+n=int(input())
 for i in range(len(arr)):
-    for j in range(len(arr[i])):
-        if arr[i][j]==1:
-print(arr[0][1])
+    if arr[n][i]==1:
+        print(node[i])
 # 강사님풀이
 name = 'ABTQVX'
 
