@@ -4,7 +4,7 @@ while True:
          break
     result=[]
     def dfs(x):
-        if len(result)==arr[0]:
+        if len(result)==6:
             print(*result)
             return
 
