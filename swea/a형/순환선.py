@@ -1,24 +1,61 @@
-'''
-(A+B)^2 + (C+D)^2 으로 계싼
-
-2개의 직통 노선은 서로 교차 x
-A에서 B를 이었는데 c는 a보다 커야하고 d는 b보다 커야함
-(2개의 직통 노선은 서로 교차x)
-
-B=A-1이면 안됨 D는 C-1이면 안됨
-(인접한 두역을 연결하는 직통 노선xx)
-
-도착지가 2개의 인접한선 or 출발지가 2개의 인접한 선이면 안됨
-(B=D+1, A=C+1이면 안됨)
-
-1개의 역에 2개의 직통 노선이면 안도미
-(A!=C면안됨)
+#안붙어 있는 것들 result에 추가 한다음 거기서
+#result[0]+ result[3] result[1] +result[2]
+#하면 될듯 그런데 arr[0]와 arr[-1]은 붙어있음
+#거기서 dfs돌려서 최댓값 구하면 될 거 같음
+t=int(input())
+for _ in range(1,t+1):
+    n=int(input())
+    arr=list(map(int,input().split()))
+    answer=float('-inf')
+    result = []
+    dat=[]
 
 
-'''
+    def recur(x):
+        global answer
+        if len(result) == 4:
+            total1=(result[0]+result[3])**2+(result[1]+result[2])**2
+            total2=(result[0]+result[1])**2+(result[2]+result[3])**2
+            answer = max(answer, total1,total2)
+            return
 
-T=int(input())
-for _ in range(1,T+1):
-    N=int(input())
-    arr=[list(map(int,input().split())) for _ in range(N)]
-    if
+
+        for i in range(x,n):
+            if (i == 0 and n - 1 in dat) or (i == n - 1 and 0 in dat):
+                continue
+            if all(abs(i-d) !=1 for d in dat):
+                result.append(arr[i])
+                dat.append(i)
+                recur(i+1)
+                result.pop()
+                dat.pop()
+    recur(0)
+    print(f'#{_} {answer}')
+
+
+
+
+
+
+#
+# T = int(input())
+# for tc in range(1, T + 1):
+#     N = int(input())
+#     station = list(map(int, input().split()))
+#     max_v = float('-inf')
+#     combi1 = []
+#     combi2 = []
+#     for i in range(N):
+#         for j in range(i + 2, N):
+#             if j == (i + N - 1) % N: continue
+#             combi1.append((i, j))
+#
+# for s1, e1 in combi1:
+#     for s2, e2 in combi1:
+#         if s1 < s2 < e1 < e2 or s2 < s1 < e2 < e1: continue
+#         if abs(s1 - s2) in [0, 1, N-1] or abs(s1 - e2) in [0, 1, N-1] or abs(e1 - s2) in [0, 1, N-1] or abs(e1 - e2) in [0, 1, N-1]: continue
+#
+#         okay = (station[s1] + station[e1]) ** 2 + (station[s2] + station[e2]) ** 2
+#         max_v = max(max_v, okay)
+#
+# print(f'#{tc} {max_v}')
