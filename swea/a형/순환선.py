@@ -14,16 +14,16 @@ for _ in range(1,t+1):
     def recur(x):
         global answer
         if len(result) == 4:
-            total1=(result[0]+result[3])**2+(result[1]+result[2])**2
-            total2=(result[0]+result[1])**2+(result[2]+result[3])**2
+            total1=(result[0]+result[3])**2+(result[1]+result[2])**2 #result에 들어 온 놈들 중에
+            total2=(result[0]+result[1])**2+(result[2]+result[3])**2 #교차하지않는 방법임 이 중 최댓값
             answer = max(answer, total1,total2)
             return
 
 
         for i in range(x,n):
-            if (i == 0 and n - 1 in dat) or (i == n - 1 and 0 in dat):
+            if (i == 0 and n - 1 in dat) or (i == n - 1 and 0 in dat): #0이랑 배열의 끝이랑 안마주치게
                 continue
-            if all(abs(i-d) !=1 for d in dat):
+            if all(abs(i-d) !=1 for d in dat): #안붙어있는 놈들을 조합으로 구현
                 result.append(arr[i])
                 dat.append(i)
                 recur(i+1)

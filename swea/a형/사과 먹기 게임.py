@@ -16,39 +16,39 @@ for _ in range(1,t+1):
         for j in range(n):
             if arr[i][j]!=0:
                 apple.append((arr[i][j],i,j))
-    apple=sorted(list(tuple(apple)))
-    x,y,dir=0,0,0
+    #apple=sorted(list(tuple(apple))) #생각해보니 순서대로 값이 나오므로 중복된 값은 나올리가 없음 걍 sort써도 될듯
+    apple.sort()
+    x,y,dir=0,0,0 #시작값
 
-    for num,apple_x,apple_y in apple:
+    for num,apple_x,apple_y in apple: #사과 위치 뽑기
         q=deque()
         visited=[[[False] *4 for _ in range(n)] for _ in range(n)]
-        q.append((x,y,dir,0))
+        q.append((x,y,dir,0)) #시작위치,방향,횟수 넣음
         visited[x][y][dir] = True
 
         min_turn = float('inf')
 
         while q:
             current_x,current_y,current_dir,turn=q.popleft()
-
-            if (current_x,current_y) == (apple_x,apple_y):
+            #q에서 아까 넣은거 뽑고
+            if (current_x,current_y) == (apple_x,apple_y): #사과에 도달하면
                 if turn< min_turn:
-                    min_turn=turn
-                    final_dir=current_dir
+                    min_turn=turn #최솟값 저장
+                    final_dir=current_dir #현재방향 저장, 저장안하면 우회전 돌아가는 거 때문에 값달라짐
                 continue
+            # 전진 가능하면 전진하고, 전진 안되면 우회전 시도
+            nx,ny=current_x+dx[current_dir],current_y+dy[current_dir] #현재 방향에서 다음 칸으로 전진하고
+            if 0 <= nx < n and 0 <= ny < n and not visited[nx][ny][current_dir]: #이게 n범위 안에 들어가고 방문하지않았다면
+                visited[nx][ny][current_dir] = True #이거를 방문처리하고
+                q.appendleft((nx, ny, current_dir, turn)) #q에 넣음으로서 계속 전진
 
-            nx,ny=current_x+dx[current_dir],current_y+dy[current_dir]
-            if 0 <= nx < n and 0 <= ny < n and not visited[nx][ny][current_dir]:
-                visited[nx][ny][current_dir] = True
-                q.appendleft((nx, ny, current_dir, turn))
-
-            now_dir = (current_dir + 1) % 4
-            if not visited[current_x][current_y][now_dir]:
-                visited[current_x][current_y][now_dir] = True
-                q.append((current_x, current_y, now_dir, turn + 1))
+            current_dir = (current_dir + 1) % 4 #우하좌상에서 +1 %4를하면 우회전으로 돌아가는 거
+            if not visited[current_x][current_y][current_dir]:
+                visited[current_x][current_y][current_dir] = True
+                q.append((current_x, current_y, current_dir, turn + 1))
 
         cnt += min_turn
-        x,y = apple_x,apple_y
-        dir=final_dir
+        x,y,dir = apple_x,apple_y,final_dir #사과 먹으면 현재 위치와 방향을 기준으로 다음 사과 찾아 떠남
 
 
     print(f'#{_} {cnt}')
