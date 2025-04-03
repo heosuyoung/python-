@@ -26,30 +26,26 @@ for _ in range(1,t+1):
     n=int(input())
     arr=list(map(int,input().split()))
     answer=0
-    cnt=float('inf')
-    ball=[]
-    def dfs():
+    def dfs(arr,total):
         global answer
-        global cnt
-        if len(ball)==n:
-            if ball[0]==
+        if len(arr)==0:
+            answer=max(answer,total)
+            return
+        for i in range(len(arr)):
+            if len(arr)==1:
+                cnt=arr[0]
+            elif i==0:
+                cnt=arr[1]
+            elif i==len(arr)-1:
+                cnt=arr[-2]
+            else:
+                cnt=arr[i-1]*arr[i+1]
+            x=arr.pop(i)
+            dfs(arr,total+cnt)
+            arr.insert(i,x)
 
-
-
-                cnt = arr[i - 1] * arr[i + 1]
-            answer=max(cnt,answer)
-        return
-
-
-    for i in range(1,n+1):
-        ball.append(i)
-        dfs()
-        ball.pop()
-    dfs()
+    dfs(arr,0)
     print(f'#{_} {answer}')
-
-
-
 
 #while arr:
     #     cnt = float('-inf')
