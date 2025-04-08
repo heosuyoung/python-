@@ -30,27 +30,15 @@ for i in range(n):
     for j in range(1,n):
         if  arr[i][j] != arr[i][j-1]:
             arr[i][j],arr[i][j-1]=arr[i][j-1],arr[i][j]
-            #자리 바꾸기를 위엣 줄로 간단히 바꿀수있음
-            # temp=arr[i][j]
-            # arr[i][j]=arr[i][j-1]
-            # arr[i][j-1]=temp
             result=max(result,count_candy())
             arr[i][j],arr[i][j-1]=arr[i][j-1],arr[i][j]
             # check하고 원상복귀 해줘야함
 
-            # temp = arr[i][j]
-            # arr[i][j] = arr[i][j - 1]
-            # arr[i][j - 1] = temp
         if arr[j][i] != arr[j-1][i]:
             arr[j][i],arr[j-1][i]=arr[j-1][i],arr[j][i]
-            # temp = arr[j][i]
-            # arr[j][i] = arr[j-1][i]
-            # arr[j-1][i] = temp
             result = max(result, count_candy())
             arr[j][i],arr[j-1][i]=arr[j-1][i],arr[j][i]
-            # temp = arr[j][i]
-            # arr[j][i] = arr[j - 1][i]
-            # arr[j - 1][i] = temp
+
 print(result)
 
 

@@ -28,7 +28,7 @@ for _ in range(1,t+1):
                 dat.append(i)
                 recur(i+1)
                 result.pop()
-                dat.pop()
+                dat.pop() #걍 dat를 visited로 사용해도 됨
     recur(0)
     print(f'#{_} {answer}')
 
