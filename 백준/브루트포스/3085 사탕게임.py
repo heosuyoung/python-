@@ -9,7 +9,7 @@ def count_candy():
     for i in range(n):
         cnt = 1
         for j in range(1,n):
-            if arr[i][j]==arr[i][j-1]:
+            if arr[i][j]==arr[i][j-1]: #양옆확인하고
                 cnt+=1
                 #아니면 cnt를 1로 초기화해야함
             else:
@@ -18,7 +18,7 @@ def count_candy():
     for i in range(n):
         cnt = 1
         for j in range(1,n):
-            if arr[j][i]==arr[j-1][i]:
+            if arr[j][i]==arr[j-1][i]: #세로확인하고
                 cnt+=1
             else:
                 cnt = 1
@@ -28,13 +28,13 @@ def count_candy():
 #만약 옆이 다르면 좌우 바꿔야함
 for i in range(n):
     for j in range(1,n):
-        if  arr[i][j] != arr[i][j-1]:
+        if  arr[i][j] != arr[i][j-1]: #양옆바꾸기
             arr[i][j],arr[i][j-1]=arr[i][j-1],arr[i][j]
             result=max(result,count_candy())
             arr[i][j],arr[i][j-1]=arr[i][j-1],arr[i][j]
             # check하고 원상복귀 해줘야함
 
-        if arr[j][i] != arr[j-1][i]:
+        if arr[j][i] != arr[j-1][i]: #세로바꾸기
             arr[j][i],arr[j-1][i]=arr[j-1][i],arr[j][i]
             result = max(result, count_candy())
             arr[j][i],arr[j-1][i]=arr[j-1][i],arr[j][i]
