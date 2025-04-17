@@ -61,3 +61,5 @@ for d in distance:
         count+=1
         max_distance=max(max_distance,d)
 print(count-1,max_distance)
+
+
