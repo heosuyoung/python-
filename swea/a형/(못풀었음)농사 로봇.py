@@ -1,45 +1,64 @@
-'''
-씨를 심으면 1일후에 싹이자람
-k번쨰로 싹이 나면 -> k+3일이후에 곡식이 자람
-그러면 씨를 심고 4일 후에 곡식이 자람
+import copy
 
-밑에서 오전 오후를 2배 늘릴꺼니깐
-홀수면 오전 짝수면 오후로 설정하는게 좋을 거 같다
+# 방향: 우, 하, 좌, 상
+DIRECTIONS = [(0, 1), (1, 0), (0, -1), (-1, 0)]
 
-개척지=0
-산=1
-씨를 2로 설정하고
-싹은 하루 후인 4에 자람
-그러면 3일 후는 +6
-곡식은 10이상으로 하고 10이상이되면 수확가능한걸로
+def simulate(start_y, start_x, start_dir, field, max_day):
+    n = len(field)
+    arr = copy.deepcopy(field)
+    plant_count = [[0]*n for _ in range(n)]
+    y, x, d = start_y, start_x, start_dir
+    day = 1
+    harvest = 0
+
+    while day <= max_day:
+        # 수확
+        if arr[y][x] not in (0, 1) and day >= arr[y][x]:
+            harvest += 1
+            arr[y][x] = 0
+        # 씨앗 심기
+        elif arr[y][x] == 0:
+            movable = False
+            for i in [(d+1)%4, d, (d+3)%4, (d+2)%4]:
+                ny, nx = y + DIRECTIONS[i][0], x + DIRECTIONS[i][1]
+                if 0 <= ny < n and 0 <= nx < n:
+                    if arr[ny][nx] == 0 or (arr[ny][nx] != 1 and day >= arr[ny][nx]):
+                        movable = True
+                        break
+            if movable:
+                plant_count[y][x] += 1
+                arr[y][x] = day + 4 + plant_count[y][x]
+
+        # 밤: 이동
+        moved = False
+        for i in [(d+1)%4, d, (d+3)%4, (d+2)%4]:
+            ny, nx = y + DIRECTIONS[i][0], x + DIRECTIONS[i][1]
+            if 0 <= ny < n and 0 <= nx < n:
+                if arr[ny][nx] == 0 or (arr[ny][nx] != 1 and day >= arr[ny][nx]):
+                    y, x, d = ny, nx, i
+                    moved = True
+                    break
+        # 이동 실패 시 위치 유지
+        day += 1
+
+    return harvest
 
 
-로봇은 오전 오후로 동작
-오전) if arr[i][j]==0이고 로봇이 다음 농지 이동가능->씨를 심는다(arr[i][j]=2로 만든다)
-     if arr[i][j]==0이고 로봇이 다음 농지 이동x -> 아무것도 안하고 현재위치
-     if arr[i][j]>=10이면 수확을한다->cnt+=1하고 arr[i][j]=0으로
+t = int(input())
+for tc in range(1, t+1):
+    n, d = map(int, input().split())
+    field = [list(map(int, input().split())) for _ in range(n)]
+    max_result = 0
 
-오후)
-for i in range(4):
-    nx=x+dx[i]
-    ny=y+dy[i]
-1)  if 0<=nx<n and 0<=ny<m:
-        if arr[nx][ny]==0 or arr[nx][ny]>=10이면 이동함
-        근데 산이거나 싹이 나는 경우 이동 불가능한데
-        싹을 다르게 표현하든가 해야할듯  --> ㄴㄴ 걍 저 조건에서만 이동가능하게
-2)  오상왼하-> dx=[0,-1,0,1]
-             dy=[1,0,-1,0] 근데 로봇이 왼쪽으로 놓임 ->상우하좌로 움직이네
-    dx=[-1,0,1,0]
-    dy=[0,1,0,-1]
-    #설마 모든 방향으로 다 놓이는 걸 생각해야하나?
-    그러면 골 아파짐
+    for y in range(n):
+        for x in range(n):
+            if field[y][x] == 1:
+                continue
+            # 들여쓰기 올바르게 복원됨
+            for dir in range(4):
+                result = simulate(y, x, dir, field, d)
+                max_result = max(max_result, result)
 
-    이동 불가능->싹이거나 산인경우 현재위치 걍 1)조건 아니면 안움직이는걸로 하면됨
+    print(f"#{tc} {max_result}")
 
-bfs로 구현 하면 될듯하다
 
-day까지 걍 같이 돌리면 bfs()로 돌리면 될 거 갍은데
-오전 오후를 우찌? -> day를 n,m에서 m이 day인데 이거를 걍 2배로 받아서 오전 오후로?
-오전은 홀수 오후로 짝수로 설정
-
-'''
