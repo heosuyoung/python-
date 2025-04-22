@@ -3,6 +3,7 @@
 #해당 배열을 튜플로 중복되는 거 없게 값을 배열에 넣음
 #그러면 해당 배열 숫자를 구하는 식으로, 구하면 그 숫자를 해당 배열에서 빼고
 #arr에서는 -1로 바꿈 그리고 해당 배열을 다 뺄때까지 반복
+'''
 from collections import deque
 t=int(input())
 for _ in range(1,t+1):
@@ -53,3 +54,55 @@ for _ in range(1,t+1):
 
     print(f'#{_} {cnt}')
 
+'''
+from collections import deque
+
+# 방향: 우(0), 하(1), 좌(2), 상(3)
+dy = [0, 1, 0, -1]
+dx = [1, 0, -1, 0]
+
+t = int(input())
+for tc in range(1, t + 1):
+    n = int(input())
+    arr = [list(map(int, input().split())) for _ in range(n)]
+
+    # 사과 위치 및 번호 저장
+    apples = []
+    for y in range(n):
+        for x in range(n):
+            if arr[y][x] != 0:
+                apples.append((arr[y][x], y, x))
+    apples.sort()
+
+    y, x, dir = 0, 0, 0  # 시작 위치 및 방향
+    total_turns = 0
+
+    for _, ay, ax in apples:
+        visited = [[[False] * 4 for _ in range(n)] for _ in range(n)] #방향때문에 *4
+        q = deque([(y, x, dir, 0)])
+        visited[y][x][dir] = True
+        found = False
+
+        while q and not found:
+            cy, cx, cd, turns = q.popleft()
+
+            # 도착 시
+            if (cy, cx) == (ay, ax): #현재 y,x가 사과 y,x에 도착한다면
+                total_turns += turns
+                y, x, dir = cy, cx, cd
+                found = True
+                break
+
+            # 전진
+            ny, nx = cy + dy[cd], cx + dx[cd]
+            if 0 <= ny < n and 0 <= nx < n and not visited[ny][nx][cd]:
+                visited[ny][nx][cd] = True
+                q.appendleft((ny, nx, cd, turns))  # 전진은 우선
+
+            # 우회전
+            nd = (cd + 1) % 4
+            if not visited[cy][cx][nd]:
+                visited[cy][cx][nd] = True
+                q.append((cy, cx, nd, turns + 1))
+
+    print(f'#{tc} {total_turns}')

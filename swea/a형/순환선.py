@@ -36,26 +36,3 @@ for _ in range(1,t+1):
 
 
 
-
-#
-# T = int(input())
-# for tc in range(1, T + 1):
-#     N = int(input())
-#     station = list(map(int, input().split()))
-#     max_v = float('-inf')
-#     combi1 = []
-#     combi2 = []
-#     for i in range(N):
-#         for j in range(i + 2, N):
-#             if j == (i + N - 1) % N: continue
-#             combi1.append((i, j))
-#
-# for s1, e1 in combi1:
-#     for s2, e2 in combi1:
-#         if s1 < s2 < e1 < e2 or s2 < s1 < e2 < e1: continue
-#         if abs(s1 - s2) in [0, 1, N-1] or abs(s1 - e2) in [0, 1, N-1] or abs(e1 - s2) in [0, 1, N-1] or abs(e1 - e2) in [0, 1, N-1]: continue
-#
-#         okay = (station[s1] + station[e1]) ** 2 + (station[s2] + station[e2]) ** 2
-#         max_v = max(max_v, okay)
-#
-# print(f'#{tc} {max_v}')

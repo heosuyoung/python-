@@ -1,61 +1,49 @@
-import sys
+#import sys
 from collections import deque
-MAX = sys.maxsize
-input = sys.stdin.readline
-N = int(input())
-person = [0] + list(map(int, input().split()))
-arr = [[] for _ in range(N+1)]
-for i in range(1, N+1):
-    temp = deque(map(int, input().split()))
-    temp.popleft()
-    arr[i] = list(temp)
+from itertools import combinations
 
+#input = sys.stdin.readline
+MAX = float('inf')
 
-def bfs(area):
-    q = deque()
-    visited = [False] * (N+1)
-    q.append(area[0])
-    visited[area[0]] = True
-    temp = 0
-    count = 1
+def bfs(area, graph, people):
+    visited = set()
+    q = deque([area[0]])
+    visited.add(area[0])
+    total = people[area[0]]
+
     while q:
-        node = q.popleft()
-        temp += person[node]
-        for nnode in arr[node]:
-            if nnode in area and not visited[nnode]:
-                visited[nnode] = True
-                count += 1
-                q.append(nnode)
-    if count == len(area):
-        return temp
+        cur = q.popleft()
+        for nxt in graph[cur]:
+            if nxt in area and nxt not in visited:
+                visited.add(nxt)
+                q.append(nxt)
+                total += people[nxt]
+
+    return total if len(visited) == len(area) else None
 
 
-def choose(n, count):
-    global result
-    if count == n:
-        area1, area2 = [], []
-        for i in range(1, N+1):
-            if visited[i]:
-                area1.append(i)
-            else:
-                area2.append(i)
-        x, y = bfs(area1), bfs(area2)
-        if x and y:
-            result = min(result, abs(x-y))
-        return
-    for i in range(1, N+1):
-        if not visited[i]:
-            visited[i] = True
-            choose(n, count+1)
-            visited[i] = False
+def solve(N, people, graph):
+    result = MAX
+    for r in range(1, N // 2 + 1):
+        for comb in combinations(range(1, N+1), r):
+            area1 = list(comb)
+            area2 = [i for i in range(1, N+1) if i not in area1]
+            sum1 = bfs(area1, graph, people)
+            sum2 = bfs(area2, graph, people)
+            if sum1 is not None and sum2 is not None:
+                result = min(result, abs(sum1 - sum2))
+    return -1 if result == MAX else result
 
 
-result = MAX
-for i in range(1, N // 2 + 1):
-    visited = [False]*(N+1)
-    choose(i, 0)
-
-if result == MAX:
-    print(-1)
-else:
-    print(result)
+T = int(input())
+for tc in range(1, T+1):
+    N = int(input())
+    graph = [[] for _ in range(N + 1)]
+    for i in range(1, N + 1):
+        row = list(map(int, input().split()))
+        for j in range(1, N + 1):
+            if row[j - 1] == 1:
+                graph[i].append(j)
+    people = [0] + list(map(int, input().split()))
+    res = solve(N, people, graph)
+    print(f'#{tc} {res}')
